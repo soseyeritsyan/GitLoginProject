@@ -8,13 +8,17 @@
 import Foundation
 import Combine
 
-class LoginViewModel: ObservableObject {
-    
-    @Published var username: String?
-    @Published var password: String?
-    
-    var isValid: Bool {
-        guard let username, let password else { return false }
-        return !username.isEmpty && !password.isEmpty
+final class LoginViewModel: ObservableObject {
+
+    private let authManager: GithubAuthManager
+    var onLoginSuccess: (() -> Void)?
+
+    init(authManager: GithubAuthManager) {
+        self.authManager = authManager
+    }
+
+    func signIn(username: String?, token: String) async throws {
+        try await authManager.login(username: username, token: token)
+        onLoginSuccess?()
     }
 }

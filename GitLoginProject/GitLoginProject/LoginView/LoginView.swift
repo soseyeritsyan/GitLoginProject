@@ -10,7 +10,7 @@ import SwiftData
 
 struct LoginView: View {
 
-    @StateObject private var viewModel = LoginViewModel()
+    @StateObject private var viewModel = LoginViewModel(authManager: GithubAuthManager())
 
     var body: some View {
         VStack {
