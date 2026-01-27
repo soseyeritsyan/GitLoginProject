@@ -9,24 +9,32 @@ import SwiftUI
 
 struct LoginViewWrapper: UIViewControllerRepresentable {
     let viewModel: LoginViewModel
-    
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-    }
-    
-    
-    func makeUIViewController(context: Context) -> UIViewController {
+
+    @EnvironmentObject var authState: AuthState
+
+    func makeUIViewController(context: Context) -> LoginViewController {
         let storyboard = UIStoryboard(
             name: "LoginStoryboard",
             bundle: .main
         )
         
         guard let vc = storyboard.instantiateViewController(
-            withIdentifier: "LoginVC"
-        ) as? LoginViewController else {
+            withIdentifier: "LoginVC") as? LoginViewController else {
             fatalError("LoginVC not found")
         }
         
         vc.viewModel = viewModel
+        
+        vc.onLoginSuccess = {
+            authState.loginSucceeded()
+        }
+        
         return vc
     }
+
+    func updateUIViewController(
+        _ uiViewController: LoginViewController,
+        context: Context
+    ) {}
 }
+

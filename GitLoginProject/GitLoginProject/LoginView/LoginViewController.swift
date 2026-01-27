@@ -15,7 +15,9 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var alertLabel: UILabel!
     @IBOutlet weak var loginButton: UIButton!
     
-    var viewModel: LoginViewModel!
+    var viewModel: LoginViewModel?
+    var onLoginSuccess: (() -> Void)?
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,17 +50,20 @@ class LoginViewController: UIViewController {
         
         Task { [weak self] in
             guard let self else { return }
+            guard let viewModel else { return }
             
             do {
                 try await viewModel.signIn(username: username, token: token)
                 loginButton.isEnabled = true
+                
+                onLoginSuccess?()
+
                 alertLabel.text = "Login success"
                 alertLabel.isHidden = false
             } catch {
                 loginButton.isEnabled = true
                 alertLabel.text = "Login Failed"
                 alertLabel.isHidden = false
-//                showAlert(title: "Login Failed", message: error.localizedDescription)
             }
         }
     }
