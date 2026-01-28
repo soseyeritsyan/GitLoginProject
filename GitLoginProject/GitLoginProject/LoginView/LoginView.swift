@@ -6,21 +6,20 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct LoginView: View {
 
-    @StateObject private var viewModel = LoginViewModel(authManager: GithubAuthManager())
+    @EnvironmentObject private var authState: AuthState
+    @StateObject private var viewModel: LoginViewModel
+
+    init(authManager: GithubAuthManager) {
+        _viewModel = StateObject(
+            wrappedValue: LoginViewModel(authManager: authManager)
+        )
+    }
 
     var body: some View {
-        VStack {
-            LoginViewWrapper(viewModel: viewModel)
-                .edgesIgnoringSafeArea(.all)
-        }
+        LoginViewWrapper(viewModel: viewModel)
+            .edgesIgnoringSafeArea(.all)
     }
-}
-
-
-#Preview {
-    LoginView()
 }

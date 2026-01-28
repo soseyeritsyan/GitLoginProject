@@ -36,16 +36,13 @@ enum AuthError: LocalizedError {
 
 
 final class GithubAuthManager {
-
-    private let session: URLSession
-    private let keychain: KeychainService
+    
+    private let keychain: KeychainService = KeychainService()
     private let credentialsKey = "github_token_credentials"
+    
+    private let authUrlString = "https://api.github.com/user"
 
-    init(session: URLSession = .shared,
-        keychain: KeychainService = KeychainService()) {
-        self.session = session
-        self.keychain = keychain
-    }
+    init() {}
 
     var isAuthenticated: Bool {
         keychain.read(key: credentialsKey) != nil
@@ -70,14 +67,16 @@ final class GithubAuthManager {
     }
 
     private func validateToken(_ token: String) async throws {
-        let url = URL(string: "https://api.github.com/user")!
+        guard let url = URL(string: authUrlString) else {
+            fatalError("Invalid URL")
+        }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
         request.setValue("2022-11-28", forHTTPHeaderField: "X-GitHub-Api-Version")
 
-        let (_, response) = try await session.data(for: request)
+        let (_, response) = try await URLSession.shared.data(for: request)
 
         guard let http = response as? HTTPURLResponse else {
             throw AuthError.invalidResponse
