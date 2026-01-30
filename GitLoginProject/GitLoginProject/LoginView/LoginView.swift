@@ -9,12 +9,11 @@ import SwiftUI
 
 struct LoginView: View {
 
-    @EnvironmentObject private var authState: AuthState
     @StateObject private var viewModel: LoginViewModel
 
-    init(authManager: GithubAuthManager) {
+    init(authState: AuthenticationState) {
         _viewModel = StateObject(
-            wrappedValue: LoginViewModel(authManager: authManager)
+            wrappedValue: LoginViewModel(authState: authState)
         )
     }
 

@@ -8,18 +8,12 @@
 import SwiftUI
 import Combine
 
-
-
 @MainActor
 final class SettingsViewModel: ObservableObject {
 
-    private let authManager: GithubAuthManager
-    private let authState: AuthState
+    private let authState: AuthenticationState
 
-    @Published var profileImageData: Data?
-
-    init(authManager: GithubAuthManager, authState: AuthState) {
-        self.authManager = authManager
+    init(authState: AuthenticationState) {
         self.authState = authState
     }
 
@@ -29,19 +23,45 @@ final class SettingsViewModel: ObservableObject {
 }
 
 
-
 struct SettingsView: View {
-    
-    @StateObject var viewModel: SettingsViewModel
-    
+
+    @EnvironmentObject private var authState: AuthenticationState
+
+    var body: some View {
+        SettingsViewContent(authState: authState)
+    }
+}
+
+private struct SettingsViewContent: View {
+
+    let authState: AuthenticationState
+    @StateObject private var viewModel: SettingsViewModel
+
+    init(authState: AuthenticationState) {
+
+        self.authState = authState
+        _viewModel = StateObject(
+            wrappedValue: SettingsViewModel(
+                authState: authState
+            )
+        )
+    }
+
     var body: some View {
         NavigationStack {
-            Button(role: .destructive) {
-                viewModel.logout()
-            } label: {
-                Text("Log out")
+            VStack(spacing: 24) {
+
+                Button(role: .destructive) {
+                    viewModel.logout()
+                } label: {
+                    Text("Log Out")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+
             }
+            .padding()
+            .navigationTitle("Settings")
         }
-        .navigationTitle("Settings")
     }
 }

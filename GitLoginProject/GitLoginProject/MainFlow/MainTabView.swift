@@ -8,27 +8,36 @@
 import SwiftUI
 
 struct MainTabView: View {
-
-    let authManager: GithubAuthManager
-    let authState: AuthState
-
+    
+    @EnvironmentObject private var authState: AuthenticationState
+    
     var body: some View {
         TabView {
-
+            
             RepositoriesView()
                 .tabItem {
                     Label("Repos", systemImage: "folder")
                 }
-
+            
+            AllUsersView()
+                .tabItem {
+                    Label("All Users", systemImage: "person")
+                }
+            
+            MusicPlayerView()
+                .tabItem {
+                    Label("Music Player", systemImage: "person")
+                }
             ProfileView()
                 .tabItem {
                     Label("Profile", systemImage: "person")
                 }
-
-            SettingsView(viewModel: SettingsViewModel(authManager: authManager, authState: authState))
-            .tabItem {
-                Label("Settings", systemImage: "gear")
-            }
+            
+            SettingsView()
+                .tabItem {
+                    Label("Settings", systemImage: "gear")
+                }
         }
     }
+    
 }

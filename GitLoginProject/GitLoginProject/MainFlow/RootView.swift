@@ -9,24 +9,33 @@ import SwiftUI
 
 struct RootView: View {
 
-    @StateObject private var authState: AuthState
+    @EnvironmentObject private var authState: AuthenticationState
 
-    init() {
-        let authManager = GithubAuthManager()
-        _authState = StateObject(
-            wrappedValue: AuthState(authManager: authManager)
-        )
+    var body: some View {
+        RootViewContent(authState: authState)
+    }
+}
+
+private struct RootViewContent: View {
+
+    @ObservedObject var authState: AuthenticationState
+    
+    init(authState: AuthenticationState) {
+        self.authState = authState
     }
 
     var body: some View {
-        if authState.isAuthenticated {
-            MainTabView(
-                authManager: authState.authManager,
-                authState: authState
-            )
-        } else {
-            LoginView(authManager: authState.authManager)
-                .environmentObject(authState)
+        Group {
+            if authState.isAuthenticated {
+                MainTabView()
+            } else {
+                LoginView(authState: authState)
+            }
+        }
+        .task {
+            if authState.isAuthenticated {
+                await authState.loadUser()
+            }
         }
     }
 }

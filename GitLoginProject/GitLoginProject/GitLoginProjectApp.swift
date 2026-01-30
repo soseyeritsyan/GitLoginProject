@@ -10,12 +10,12 @@ import SwiftData
 
 @main
 struct GitLoginProjectApp: App {
-    let authManager = GithubAuthManager()
-    let authState: AuthState
+    @StateObject private var authState: AuthenticationState
     
     init() {
-        let manager = GithubAuthManager()
-        self.authState = AuthState(authManager: manager)
+        _authState = StateObject(
+            wrappedValue: AuthenticationState()
+        )
     }
     
     var body: some Scene {

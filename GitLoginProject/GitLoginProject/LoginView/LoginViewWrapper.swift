@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct LoginViewWrapper: UIViewControllerRepresentable {
-    let viewModel: LoginViewModel
-
-    @EnvironmentObject var authState: AuthState
+    let viewModel: LoginViewModel?
 
     func makeUIViewController(context: Context) -> LoginViewController {
         let storyboard = UIStoryboard(
@@ -24,11 +22,7 @@ struct LoginViewWrapper: UIViewControllerRepresentable {
         }
         
         vc.viewModel = viewModel
-        
-        vc.onLoginSuccess = {
-            authState.loginSucceeded()
-        }
-        
+                
         return vc
     }
 
