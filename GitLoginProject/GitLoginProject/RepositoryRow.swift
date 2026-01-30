@@ -15,12 +15,6 @@ struct RepositoryRow: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(repo.name)
                     .font(.headline)
-
-                if repo.isPrivate {
-                    Text("Private")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
             }
 
             Spacer()
