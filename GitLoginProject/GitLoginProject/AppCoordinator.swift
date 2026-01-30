@@ -18,11 +18,13 @@ final class AppCoordinator: ObservableObject {
     
     @Published private(set) var flow: AppFlow = .login
 
-    private let authManager: GithubAuthManager
+//    private let authManager: GithubAuthManager
+    private let authState: AuthenticationState
 
-    init(authManager: GithubAuthManager) {
-        self.authManager = authManager
-        self.flow = authManager.isAuthenticated ? .main : .login
+    init(/*authManager: GithubAuthManager,*/ authState: AuthenticationState) {
+//        self.authManager = authManager
+        self.authState = authState
+        self.flow = authState.isAuthenticated ? .main : .login
     }
     
     func onLoginSuccess() {
@@ -30,7 +32,7 @@ final class AppCoordinator: ObservableObject {
     }
 
     func logout() {
-        authManager.logout()
+        authState.logout()
         flow = .login
     }
 }

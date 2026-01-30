@@ -1,18 +1,18 @@
 //
-//  RepositoroesView.swift
+//  MusicPlayerView.swift
 //  GitLoginProject
 //
-//  Created by sose yeritsyan on 26.01.26.
+//  Created by sose yeritsyan on 28.01.26.
 //
 
 import SwiftUI
 
-struct RepositoriesView: View {
+struct MusicPlayerView: View {
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
     }
 }
 
 #Preview {
-    RepositoriesView()
+    MusicPlayerView()
 }
