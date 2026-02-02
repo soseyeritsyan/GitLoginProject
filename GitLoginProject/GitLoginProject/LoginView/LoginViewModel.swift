@@ -11,10 +11,10 @@ import Combine
 @MainActor
 final class LoginViewModel: ObservableObject {
 
-    private let authManager: GithubAuthManager
+    private let authState: AuthenticationState
 
-    init(authManager: GithubAuthManager) {
-        self.authManager = authManager
+    init(authState: AuthenticationState) {
+        self.authState = authState
     }
 
     func signIn(username: String?, token: String) async throws {
@@ -22,6 +22,6 @@ final class LoginViewModel: ObservableObject {
             throw AuthError.invalidToken
         }
         
-        try await authManager.login(username: username, token: token)
+        try await authState.login(username: username, token: token)
     }
 }
